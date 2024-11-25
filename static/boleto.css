@@ -1,0 +1,130 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.ticket-container {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+}
+
+.ticket-header {
+    text-align: center;
+    border-bottom: 2px solid #2196f3;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.logo {
+    max-width: 100px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #1976d2;
+    margin: 0;
+}
+
+.tagline {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 5px;
+}
+
+.ticket-body {
+    margin-bottom: 20px;
+}
+
+.ticket-section {
+    margin-bottom: 15px;
+}
+
+.ticket-section h2 {
+    font-size: 1.2rem;
+    color: #1976d2;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #bbdefb;
+    padding-bottom: 5px;
+}
+
+.ticket-section p {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #444;
+}
+
+strong {
+    color: #1976d2;
+}
+
+.ticket-footer {
+    text-align: center;
+    border-top: 2px solid #2196f3;
+    padding-top: 15px;
+    margin-top: 20px;
+}
+
+.barcode {
+    max-width: 80%;
+    height: auto;
+    margin: 10px auto;
+}
+
+.footer-note {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+.ticket-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-print, .btn-cancel {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-print {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.btn-print:hover {
+    background-color: #388e3c;
+}
+
+.btn-cancel {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.btn-cancel:hover {
+    background-color: #d32f2f;
+}
+
+@media print {
+    .ticket-actions {
+        display: none;
+    }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Recomendacion.css') }}">
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="text-center text-primary mb-4">Explora Destinos Inolvidables</h1>
+
+        {% if recomendaciones %}
+        <div class="row">
+            {% for recomendacion in recomendaciones %}
+            <div class="col-md-4">
+                <div class="card">
+                    <!-- Imagen -->
+                    <img src="{{ url_for('static', filename='uploads/' + recomendacion['imagen_url']) }}" 
+                         class="card-img-top" 
+                         alt="Imagen de la recomendación" 
+                         onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/default.jpg') }}';">
+                    
+                    <!-- Contenido -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recomendacion['titulo'] }}</h5>
+                        <p class="card-text">{{ recomendacion['descripcion'] }}</p>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert text-center">
+            <h3 class="text-warning">¡Lo sentimos!</h3>
+            <p>No hay recomendaciones disponibles en este momento. ¡Vuelve pronto para más destinos!</p>
+        </div>
+        {% endif %}
+
+        <div class="promotion-section text-center mt-5">
+            <h2 class="text-success">Ofertas Exclusivas para Viajar Más</h2>
+            <p>Explora los mejores destinos al mejor precio. ¡Reserva ahora y ahorra en grande!</p>
+            <a href="{{ url_for('app_routes.mostrar_promociones_cliente') }}" class="btn btn-info">Ver Promociones</a>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('app_routes.bienvenida_cliente') }}" class="btn btn-secondary">Regresar</a>
+        </div>
+        </body>
+        </html>
+        

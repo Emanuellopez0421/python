@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Ganancias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='reporte_ganancias.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Reporte de Ganancias</h1>
+        
+        <!-- Tabla -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Total Ganancias</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ganancia in ganancias %}
+                <tr>
+                    <td>{{ ganancia[0] }}</td>
+                    <td>${{ ganancia[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Gráfico -->
+        <canvas id="gananciasChart" style="margin-top: 2rem;"></canvas>
+
+        <!-- Botón de regresar -->
+        <button class="regresar" onclick="window.history.back()">Regresar</button>
+    </div>
+
+    <script>
+        // Obtener datos dinámicamente desde Flask
+        const labels = [{% for ganancia in ganancias %}"{{ ganancia[0] }}",{% endfor %}];
+        const data = [{% for ganancia in ganancias %}{{ ganancia[1] }},{% endfor %}];
+
+        // Crear el gráfico
+        const ctx = document.getElementById('gananciasChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line', // Tipo de gráfico (línea)
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Ganancias',
+                    data: data,
+                    backgroundColor: 'rgba(183, 28, 28, 0.2)', // Rojo translúcido
+                    borderColor: 'rgba(183, 28, 28, 1)', // Rojo fuerte
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_dashboard.css') }}">
+</head>
+<body>
+    <!-- Barra Lateral -->
+    <div class="admin-container">
+        <div class="sidebar">
+            <h4 class="text-center">Panel Admin</h4>
+            <ul class="nav-menu">
+                <li><a href="#vuelos">Vuelos Registrados</a></li>
+                <li><a href="#reservas">Reservas Pagadas</a></li>
+                <li><a href="{{ url_for('app_routes.reporte_ganancias') }}">Reporte de Ganancias</a></li>
+                <li><a href="{{ url_for('app_routes.estadisticas_pago') }}">Estadísticas de Métodos de Pago</a></li>
+                <li><a href="{{ url_for('app_routes.crear_recomendacion') }}">Crear Recomendación</a></li>
+                <li><a href="{{ url_for('app_routes.recomendaciones') }}">Ver Recomendaciones</a></li>
+                <li><a href="{{ url_for('app_routes.crear_promocion') }}">Crear Promoción</a></li>
+                <li><a href="{{ url_for('app_routes.listar_promociones') }}">Administrar Promociones</a></li>
+                <li><a href="{{ url_for('app_routes.crear_vuelo') }}">Crear nuevo vuelo</a></li>
+            </ul>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="content">
+            <div class="header">
+                <h1>Panel de Administración</h1>
+                <a href="{{ url_for('app_routes.cerrar_sesion') }}" class="btn-logout">Cerrar Sesión</a>
+            </div>
+
+            <!-- Contenido de las Pestañas -->
+            <div class="tab-content">
+                <!-- Pestaña de Vuelos -->
+                <div id="vuelos">
+                    <h3>Vuelos Registrados</h3>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Vuelo ID</th>
+                                <th>Operador</th>
+                                <th>Precio</th>
+                                <th>Salida</th>
+                                <th>Fecha Salida</th>
+                                <th>Hora Salida</th>
+                                <th>Llegada</th>
+                                <th>Fecha Llegada</th>
+                                <th>Hora Llegada</th>
+                                <th>Tipo de Vuelo</th>
+                                <th>Modo de Vuelo</th>
+                                <th>Matrícula</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vuelo in vuelos %}
+                            <tr>
+                                <td>{{ vuelo[0] }}</td>
+                                <td>{{ vuelo[1] }}</td>
+                                <td>{{ vuelo[2] }}</td>
+                                <td>${{ vuelo[3] }}</td>
+                                <td>{{ vuelo[4] }}</td>
+                                <td>{{ vuelo[5] }}</td>
+                                <td>{{ vuelo[6] }}</td>
+                                <td>{{ vuelo[7] }}</td>
+                                <td>{{ vuelo[8] }}</td>
+                                <td>{{ vuelo[9] }}</td>
+                                <td>{{ vuelo[10] }}</td>
+                                <td>{{ vuelo[11] }}</td>
+                                <td>{{ vuelo[12] }}</td>
+                                <td>
+                                    <a href="{{ url_for('app_routes.actualizar_vuelo', vuelo_id=vuelo[1]) }}" class="btn-edit">Actualizar</a>
+                                    <form action="{{ url_for('app_routes.borrar_vuelo', vuelo_id=vuelo[1]) }}" method="POST" style="display:inline-block;">
+                                        <button type="submit" class="btn-delete">Borrar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pestaña de Reservas Pagadas -->
+                <div id="reservas">
+                    <h3>Reservas Pagadas</h3>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>ID Reserva</th>
+                                <th>Cliente</th>
+                                <th>Salida</th>
+                                <th>Llegada</th>
+                                <th>Fecha de Salida</th>
+                                <th>Hora de Salida</th>
+                                <th>Fecha de Llegada</th>
+                                <th>Hora de Llegada</th>
+                                <th>Modo de Vuelo</th>
+                                <th>Precio</th>
+                                <th>Fecha de Pago</th>
+                                <th>Estado de Pago</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reserva in reservas_pagadas %}
+                            <tr>
+                                <td>{{ reserva[0] }}</td>
+                                <td>{{ reserva[1] }}</td>
+                                <td>{{ reserva[2] }}</td>
+                                <td>{{ reserva[3] }}</td>
+                                <td>{{ reserva[4] }}</td>
+                                <td>{{ reserva[5] }}</td>
+                                <td>{{ reserva[6] }}</td>
+                                <td>{{ reserva[7] }}</td>
+                                <td>{{ reserva[8] }}</td>
+                                <td>${{ reserva[9] }}</td>
+                                <td>{{ reserva[10] }}</td>
+                                <td>{{ reserva[11] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

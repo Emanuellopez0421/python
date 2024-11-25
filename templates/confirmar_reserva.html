@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Reserva</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='confreserva_estilos.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Confirmar Reserva</h1>
+
+        <div class="card">
+            <h2>Detalles del Vuelo</h2>
+            <p><strong>Salida:</strong> {{ vuelo.salida }}</p>
+            <p><strong>Llegada:</strong> {{ vuelo.llegada }}</p>
+            <p><strong>Fecha de Salida:</strong> {{ vuelo.fecha_salida }}</p>
+            <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida }}</p>
+            <p><strong>Fecha de Llegada:</strong> {{ vuelo.fecha_llegada }}</p>
+            <p><strong>Hora de Llegada:</strong> {{ vuelo.hora_llegada }}</p>
+            <p><strong>Modo de Vuelo:</strong> {{ vuelo.modo_vuelo }}</p>
+            <p><strong>Precio:</strong> ${{ vuelo.precio }} MEX</p>
+
+            <p>¿Desea confirmar su reserva para este vuelo?</p>
+            <form method="POST" action="{{ url_for('app_routes.reservar_vuelo', vuelo_id=vuelo.vuelo_id) }}">
+                <button type="submit" class="btn-primary">Confirmar Reserva</button>
+                <a href="{{ url_for('app_routes.cliente_dashboard') }}" class="btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

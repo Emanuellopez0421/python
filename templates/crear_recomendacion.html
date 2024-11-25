@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Nueva Recomendación</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='recomendaciones.css') }}">
+</head>
+<body>
+    <div class="fondo-innovador">
+        <div class="container py-5">
+            <div class="shadow-lg p-5 mb-5 bg-white rounded">
+                <h1 class="text-center text-primary">Crear Nueva Recomendación</h1>
+                <p class="text-muted text-center">Rellena el formulario para agregar una nueva recomendación para los clientes.</p>
+
+                <div class="card mt-4 p-4 shadow-sm border-0">
+                    <form method="POST" enctype="multipart/form-data">
+                        <!-- Campo: Título -->
+                        <div class="form-group">
+                            <label for="titulo" class="font-weight-bold">Título de la Recomendación:</label>
+                            <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Ejemplo: Mejores Lugares para Viajar en 2024" required>
+                        </div>
+
+                        <!-- Campo: Descripción -->
+                        <div class="form-group">
+                            <label for="descripcion" class="font-weight-bold">Descripción:</label>
+                            <textarea id="descripcion" name="descripcion" class="form-control" rows="5" placeholder="Escribe aquí una breve descripción sobre la recomendación." required></textarea>
+                        </div>
+
+                        <!-- Campo: Subir Imagen -->
+                        <div class="form-group">
+                            <label for="imagen" class="font-weight-bold">Subir Imagen:</label>
+                            <input type="file" id="imagen" name="imagen" class="form-control-file" accept="image/*" required>
+                            <small class="form-text text-muted">Selecciona una imagen para acompañar la recomendación.</small>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Guardar Recomendación</button>
+                            <a href="{{ url_for('app_routes.recomendaciones') }}" class="btn btn-secondary px-4">Cancelar</a>
+                            <button type="button" class="btn btn-info px-4" onclick="window.history.back();">Regresar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Mostrar la imagen si existe -->
+                {% if imagen_url %}
+                <div class="mt-4 text-center">
+                    <h3 class="text-success">Vista previa de la imagen:</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + imagen_url) }}" alt="Vista previa" class="img-fluid rounded" style="max-height: 300px;">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Vuelo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='confirmar_vuelo_estilos.css') }}">
+
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Confirmar Vuelo</h1>
+        <div class="card mt-4 p-4 shadow-sm">
+            <h3>Detalles del Vuelo</h3>
+            <p><strong>Salida:</strong> {{ vuelo.salida }}</p>
+            <p><strong>Llegada:</strong> {{ vuelo.llegada }}</p>
+            <p><strong>Fecha de Salida:</strong> {{ vuelo.fecha_salida }}</p>
+            <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida }}</p>
+            <p><strong>Tipo de Vuelo:</strong> {{ vuelo.tipo_vuelo }}</p>
+            <p><strong>Modo de Vuelo:</strong> {{ vuelo.modo_vuelo }}</p>
+            <p><strong>Precio:</strong> ${{ vuelo.precio }}</p>
+
+            <form method="POST" action="">
+                <button type="submit" class="btn btn-primary">Confirmar Vuelo</button>
+                <a href="{{ url_for('app_routes.cliente_dashboard') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
