@@ -236,29 +236,41 @@ def borrar_vuelo(vuelo_id):
     return redirect(url_for('app_routes.admin_dashboard'))
 
 
-# Reporte de ganancias
 @app_routes.route('/reporte_ganancias', methods=['GET'])
 def reporte_ganancias():
     if 'user_id' not in session or session.get('role') != 'administrador':
         flash("No tienes permisos para acceder a esta página", "danger")
         return redirect(url_for('app_routes.iniciar_sesion'))
 
-    connection = get_db_connection()
-    cursor = connection.cursor()
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
 
-    cursor.execute("""
-        SELECT DATE(fecha_pago) AS fecha, SUM(monto) AS total_ganancias
-        FROM pagos
-        WHERE estado_pago = 'Pagado'
-        GROUP BY DATE(fecha_pago)
-        ORDER BY fecha DESC
-    """)
-    ganancias = cursor.fetchall()
+        # Consulta SQL
+        cursor.execute("""
+            SELECT DATE(fecha_pago) AS fecha, SUM(monto) AS total_ganancias
+            FROM pagos
+            WHERE estado_pago = 'Pagado'
+            GROUP BY DATE(fecha_pago)
+            ORDER BY fecha DESC
+        """)
+        ganancias = cursor.fetchall()
+        print("Ganancias obtenidas:", ganancias)
 
-    cursor.close()
-    connection.close()
+    except Exception as e:
+        print("Error al obtener los datos:", e)
+        flash("Error al generar el reporte de ganancias.", "danger")
+        ganancias = []
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
 
     return render_template('reporte_ganancias.html', ganancias=ganancias)
+
+
 
 # Estadísticas de métodos de pago
 @app_routes.route('/estadisticas_pago', methods=['GET'])

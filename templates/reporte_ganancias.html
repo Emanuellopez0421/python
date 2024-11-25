@@ -9,49 +9,58 @@
 </head>
 <body>
     <div class="container">
-        <h1>Reporte de Ganancias</h1>
+        <h1 class="text-center">Reporte de Ganancias</h1>
         
         <!-- Tabla -->
-        <table>
-            <thead>
+        {% if ganancias %}
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>Fecha</th>
                     <th>Total Ganancias</th>
                 </tr>
             </thead>
             <tbody>
-                {% for ganancia in ganancias %}
+                {% for fecha, monto in ganancias %}
                 <tr>
-                    <td>{{ ganancia[0] }}</td>
-                    <td>${{ ganancia[1] }}</td>
+                    <td>{{ fecha }}</td>
+                    <td>${{ monto }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
         <!-- Gráfico -->
-        <canvas id="gananciasChart" style="margin-top: 2rem;"></canvas>
+        <canvas id="gananciasChart" width="800" height="400" style="margin-top: 2rem;"></canvas>
+        {% else %}
+        <p class="text-center">No hay datos de ganancias disponibles para mostrar.</p>
+        {% endif %}
 
         <!-- Botón de regresar -->
-        <button class="regresar" onclick="window.history.back()">Regresar</button>
+        <button class="btn btn-danger mt-3" onclick="window.history.back()">Regresar</button>
     </div>
 
+    {% if ganancias %}
     <script>
-        // Obtener datos dinámicamente desde Flask
-        const labels = [{% for ganancia in ganancias %}"{{ ganancia[0] }}",{% endfor %}];
-        const data = [{% for ganancia in ganancias %}{{ ganancia[1] }},{% endfor %}];
+        // Convertir los datos de ganancias en etiquetas y valores
+        const labels = {{ ganancias | map(attribute=0) | list | tojson }};
+        const data = {{ ganancias | map(attribute=1) | list | tojson }};
+
+        // Debug: Imprimir datos en la consola del navegador
+        console.log("Etiquetas (Fechas):", labels);
+        console.log("Datos (Ganancias):", data);
 
         // Crear el gráfico
         const ctx = document.getElementById('gananciasChart').getContext('2d');
         new Chart(ctx, {
-            type: 'line', // Tipo de gráfico (línea)
+            type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Ganancias',
+                    label: 'Ganancias Totales',
                     data: data,
-                    backgroundColor: 'rgba(183, 28, 28, 0.2)', // Rojo translúcido
-                    borderColor: 'rgba(183, 28, 28, 1)', // Rojo fuerte
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)', // Azul translúcido
+                    borderColor: 'rgba(54, 162, 235, 1)', // Azul fuerte
                     borderWidth: 2
                 }]
             },
@@ -59,7 +68,7 @@
                 responsive: true,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true
                     }
                 },
                 scales: {
@@ -70,5 +79,6 @@
             }
         });
     </script>
+    {% endif %}
 </body>
 </html>
