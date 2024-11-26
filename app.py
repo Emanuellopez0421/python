@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from routes import app_routes  # Importamos el Blueprint desde routes.py
+from routes import app_routes  
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)

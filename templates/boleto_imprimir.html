@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boleto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='boleto1.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalles del Boleto</h1>
+        {% if ticket %}
+            <div class="ticket-details">
+                <p><strong>ID Reserva:</strong> {{ ticket.reserva_id }}</p>
+                <p><strong>Cliente:</strong> {{ ticket.nombre_cliente }}</p>
+                <p><strong>Origen:</strong> {{ ticket.salida }}</p>
+                <p><strong>Destino:</strong> {{ ticket.llegada }}</p>
+                <p><strong>Fecha Salida:</strong> {{ ticket.fecha_salida }}</p>
+                <p><strong>Hora Salida:</strong> {{ ticket.hora_salida }}</p>
+                <p><strong>Fecha Llegada:</strong> {{ ticket.fecha_llegada }}</p>
+                <p><strong>Hora Llegada:</strong> {{ ticket.hora_llegada }}</p>
+                <p><strong>Precio:</strong> ${{ ticket.precio }}</p>
+                <p><strong>Estado del Pago:</strong> {{ ticket.estado_pago }}</p>
+            </div>
+            <button class="btn-print" onclick="window.print()">Imprimir</button>
+        {% else %}
+            <p class="no-details">No se encontraron detalles para este boleto.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -509,12 +509,38 @@ def bienvenida_cliente():
     return render_template('bienvenida_cliente_aerolinea.html')
 
 
-@app_routes.route('/cliente_dashboard')
+@app_routes.route('/cliente_dashboard', methods=['GET'])
 def cliente_dashboard():
     if 'user_id' not in session or session.get('role') != 'cliente':
         flash("No tienes permisos para acceder a esta página", "danger")
         return redirect(url_for('app_routes.iniciar_sesion'))
-    return render_template('cliente_dashboard.html')
+
+    cliente_id = session['user_id']
+
+    try:
+        # Conexión a la base de datos
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        # Consulta para obtener las reservas del cliente
+        cursor.execute("""
+            SELECT r.reserva_id, v.salida, v.llegada, v.fecha_salida, v.hora_salida,
+                   v.fecha_llegada, v.hora_llegada, v.precio
+            FROM reservas r
+            JOIN vueloandm v ON r.vuelo_id = v.vuelo_id
+            WHERE r.usuario_id = %s
+        """, (cliente_id,))
+        reservas = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        # Renderizar la plantilla con las reservas
+        return render_template('cliente_dashboard.html', reservas=reservas)
+
+    except Exception as e:
+        flash(f"Error al cargar las reservas: {str(e)}", "danger")
+        return render_template('cliente_dashboard.html', reservas=[])
 
 
 
@@ -794,6 +820,91 @@ def obtener_ticket_por_vuelo_id(vuelo_id):
     except Exception as e:
         print(f"Error al obtener los datos del ticket: {str(e)}")
         return None
+    
+@app_routes.route('/mis_reservas', methods=['GET'])
+def mis_reservas():
+    # Verificar si el cliente está autenticado
+    if 'user_id' not in session or session.get('role') != 'cliente':
+        flash("Debes iniciar sesión para acceder a tus reservas.", "danger")
+        return redirect(url_for('app_routes.iniciar_sesion'))
+
+    cliente_id = session['user_id']
+
+    try:
+        # Conexión a la base de datos
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        # Obtener las reservas pagadas del cliente
+        cursor.execute(
+            """
+            SELECT r.reserva_id, v.vuelo_id, v.salida, v.llegada, v.fecha_salida, 
+                   v.hora_salida, v.fecha_llegada, v.hora_llegada, v.precio, p.estado_pago
+            FROM reservas r
+            JOIN vueloandm v ON r.vuelo_id = v.vuelo_id
+            JOIN pagos p ON p.reserva_id = r.reserva_id
+            WHERE r.usuario_id = %s AND p.estado_pago = 'Pagado'
+            """,
+            (cliente_id,)
+        )
+
+        reservas = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        # Renderizar las reservas
+        return render_template('mis_reservas.html', reservas=reservas)
+
+    except Exception as e:
+        flash(f"Ocurrió un error al obtener tus reservas: {str(e)}", "danger")
+        return render_template('mis_reservas.html', reservas=[])
+
+
+@app_routes.route('/imprimir_boleto/<int:reserva_id>', methods=['GET'])
+def imprimir_boleto(reserva_id):
+    # Verificar si el cliente está autenticado
+    if 'user_id' not in session or session.get('role') != 'cliente':
+        flash("Debes iniciar sesión para imprimir tu boleto.", "danger")
+        return redirect(url_for('app_routes.iniciar_sesion'))
+
+    try:
+        # Conexión a la base de datos
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        # Obtener los detalles de la reserva y vuelo
+        cursor.execute(
+            """
+            SELECT r.reserva_id, u.nombre AS nombre_cliente, v.salida, v.llegada, 
+                   v.fecha_salida, v.hora_salida, v.fecha_llegada, v.hora_llegada, 
+                   v.precio, p.estado_pago
+            FROM reservas r
+            JOIN usuario u ON r.usuario_id = u.id
+            JOIN vueloandm v ON r.vuelo_id = v.vuelo_id
+            JOIN pagos p ON p.reserva_id = r.reserva_id
+            WHERE r.reserva_id = %s AND p.estado_pago = 'Pagado'
+            """,
+            (reserva_id,)
+        )
+
+        ticket = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if not ticket:
+            flash("No se encontraron los detalles del boleto.", "danger")
+            return redirect(url_for('app_routes.mis_reservas'))
+
+        # Renderizar el boleto para imprimir
+        return render_template('boleto_imprimir.html', ticket=ticket)
+
+    except Exception as e:
+        flash(f"Ocurrió un error al obtener los datos del boleto: {str(e)}", "danger")
+        return redirect(url_for('app_routes.mis_reservas'))
+
+
 
 @app_routes.route('/registro', methods=['GET', 'POST'])
 def registro():

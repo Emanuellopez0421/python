@@ -50,6 +50,11 @@ body {
     color: #555555;
 }
 
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
 .actions a {
     text-decoration: none;
     padding: 10px 15px;
@@ -58,6 +63,7 @@ body {
     font-weight: bold;
     color: #ffffff;
     transition: background-color 0.3s;
+    text-align: center;
 }
 
 .actions a.btn-info {
@@ -75,6 +81,15 @@ body {
 
 .actions a.btn-warning:hover {
     background-color: #e0a800;
+}
+
+.actions a.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.actions a.btn-primary:hover {
+    background-color: #0056b3;
 }
 
 .actions a.btn-danger {
